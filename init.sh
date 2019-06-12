@@ -5,10 +5,15 @@ sudo apt -y install unzip jq build-essential ruby-dev && gem install --no-ri --n
 
 
 ## pivnet
-wget $(curl -s https://api.github.com/repos/pivotal-cf/pivnet-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O pivnet && chmod a+x pivnet && sudo mv pivnet /usr/local/bin
+NAME=pivnet
+wget $(curl -s https://api.github.com/repos/pivotal-cf/pivnet-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && chmod a+x ${NAME} && sudo mv ${NAME} /usr/local/bin
 
 ## om
-wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O om && chmod a+x om && sudo mv om /usr/local/bin
+NAME=om
+wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && chmod a+x ${NAME} && sudo mv ${NAME} /usr/local/bin
 
+## bosh
+NAME=bosh
+wget $(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && chmod a+x ${NAME} && sudo mv ${NAME} /usr/local/bin
 
 
