@@ -33,4 +33,8 @@ sudo mv ${NAME} /usr/local/bin
 NAME=bosh
 wget $(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && chmod a+x ${NAME} && sudo mv ${NAME} /usr/local/bin
 
+# fly
+# cf
+# pks
+# kubectl
 
