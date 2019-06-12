@@ -34,6 +34,9 @@ NAME=bosh
 wget $(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && chmod a+x ${NAME} && sudo mv ${NAME} /usr/local/bin
 
 # fly
+NAME=fly
+wget $(curl -s https://api.github.com/repos/concourse/concourse/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select(.name | contains("fly")) | select(.name | contains("sha") | not) | .browser_download_url') -O ${NAME} && chmod a+x ${NAME} && sudo mv ${NAME} /usr/local/bin
+
 # cf
 # pks
 # kubectl
