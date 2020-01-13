@@ -8,7 +8,7 @@ gem install --no-ri --no-rdoc cf-uaac
 VERSION=0.11.14
 wget -O terraform.zip https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip && \
 unzip terraform.zip && \
-sudo mv terraform /usr/local/bin \
+sudo mv terraform /usr/local/bin && \
 rm -rf terraform.zip
 
 ## pivnet
