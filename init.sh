@@ -8,7 +8,8 @@ gem install --no-ri --no-rdoc cf-uaac
 VERSION=0.11.14
 wget -O terraform.zip https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip && \
 unzip terraform.zip && \
-sudo mv terraform /usr/local/bin
+sudo mv terraform /usr/local/bin \
+rm -rf terraform.zip
 
 ## pivnet
 NAME=pivnet
@@ -18,7 +19,7 @@ sudo mv ${NAME} /usr/local/bin
 
 ## om
 NAME=om
-wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && \
+wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("tar.gz")) | .browser_download_url') -O ${NAME} && \
 chmod a+x ${NAME} && \
 sudo mv ${NAME} /usr/local/bin
 
