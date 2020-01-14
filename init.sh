@@ -41,3 +41,12 @@ wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(
 
 # kubectl
 
+
+
+######
+# install vSphere CLI (govc)
+######
+NAME=govc
+wget $(curl -s https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && \
+chmod a+x ${NAME} && \
+sudo mv ${NAME} /usr/local/bin
