@@ -19,9 +19,7 @@ sudo mv ${NAME} /usr/local/bin
 
 ## om
 NAME=om
-wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("tar.gz")) | .browser_download_url') -O ${NAME} && \
-chmod a+x ${NAME} && \
-sudo mv ${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("tar.gz")) | .browser_download_url') -O- | tar xzvf - -C /tmp  && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
 
 ## bosh
 NAME=bosh
@@ -47,6 +45,17 @@ wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(
 # install vSphere CLI (govc)
 ######
 NAME=govc
-wget $(curl -s https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && \
-chmod a+x ${NAME} && \
-sudo mv ${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("amd64")) | .browser_download_url') && gzip -d ${NAME}*gz && chmod a+x ${NAME}_linux_amd64 && sudo mv ${NAME}_linux_amd64 /usr/local/bin/govc
+
+
+##
+## cli versions
+##
+
+terraform -version
+echo "Pivnet cli version : $(pivnet -version)"
+echo "Ops Manager cli version : $(om -version)"
+echo "BOSH cli version : $(bosh -version)"
+echo "Concourse cli version : $(fly -version)"
+echo "vSphere Cli version : $(govc version)"
+
