@@ -70,3 +70,5 @@ echo "Concourse cli version : $(fly -version)"
 echo "vSphere Cli version : $(govc version)"
 pks --version
 echo "Kubectl version : $(kubectl version --short)"
+echo "jq version : $(jq --version)"
+echo "credhub version : $(credhub --version)"
