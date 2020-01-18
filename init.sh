@@ -27,13 +27,18 @@ wget $(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/releases/lates
 chmod a+x ${NAME} && \
 sudo mv ${NAME} /usr/local/bin
 
-# fly
+## fly
 NAME=fly
 wget $(curl -s https://api.github.com/repos/concourse/concourse/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select(.name | contains("fly")) | select(.name | contains("sha") | not) | .browser_download_url') -O- | tar xzvf - -C /tmp && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
 
-# cf
+## cf
 NAME=cf
 wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest | jq -r '.name' | sed 's/v//g')&source=github-rel" -O- | tar xzvf - -C /tmp && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+
+## credhub
+NAME=credhub
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzvf - -C /tmp  && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+
 
 # pks and ikubectl
 #pivnet login --api-toke=${PIVNET_TOKEN}
