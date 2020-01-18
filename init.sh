@@ -72,3 +72,8 @@ pks --version
 echo "Kubectl version : $(kubectl version --short)"
 echo "jq version : $(jq --version)"
 echo "credhub version : $(credhub --version)"
+
+
+
+## cf7 - https://packages.cloudfoundry.org/stable?release=linux64-binary&version=7.0.0-beta.28&source=github-rel
+## jq - https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
