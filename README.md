@@ -9,6 +9,7 @@
 - terraform
 - uaac
 - credhub
+- govc 
 
 
 
