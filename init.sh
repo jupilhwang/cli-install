@@ -35,10 +35,16 @@ wget $(curl -s https://api.github.com/repos/concourse/concourse/releases/latest 
 NAME=cf
 wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest | jq -r '.name' | sed 's/v//g')&source=github-rel" -O- | tar xzvf - -C /tmp && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
 
-# pks
-
-# kubectl
-
+# pks and ikubectl
+#pivnet login --api-toke=${PIVNET_TOKEN}
+PKS_VERSION=$(pivnet releases -p pivotal-container-service --format json | jq -r '.[].version' | head -n 1)
+PKS_CLI_FILE_ID=$(pivnet product-files -p pivotal-container-service -r ${PKS_VERSION} --format json | jq -r '.[] | select(.name | contains("PKS CLI") and contains("Linux")).id')
+KUBECTL_CLI_FILE_ID=$(pivnet product-files -p pivotal-container-service -r ${PKS_VERSION} --format json | jq -r '.[] | select(.name | contains("Kubectl") and contains("Linux")).id')
+pivnet download-product-files -p pivotal-container-service -r ${PKS_VERSION} -i ${PKS_CLI_FILE_ID}
+pivnet download-product-files -p pivotal-container-service -r ${PKS_VERSION} -i ${KUBECTL_CLI_FILE_ID}
+chmod a+x pks* kubectl*
+sudo mv pks* /usr/local/bin/pks
+sudo mv kubectl* /usr/local/bin/kubectl
 
 
 ######
@@ -51,11 +57,11 @@ wget $(curl -s https://api.github.com/repos/vmware/govmomi/releases/latest | jq 
 ##
 ## cli versions
 ##
-
 terraform -version
 echo "Pivnet cli version : $(pivnet -version)"
 echo "Ops Manager cli version : $(om -version)"
 echo "BOSH cli version : $(bosh -version)"
 echo "Concourse cli version : $(fly -version)"
 echo "vSphere Cli version : $(govc version)"
-
+pks --version
+echo "Kubectl version : $(kubectl version --short)"
