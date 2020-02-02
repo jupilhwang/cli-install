@@ -37,8 +37,11 @@ wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(
 
 ## credhub
 NAME=credhub
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C /tmp  && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C /tmp && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
 
+## uaa-cli
+NAME=uaac
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O /tmp/${NAME} | chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
 
 # pks and ikubectl
 #pivnet login --api-toke=${PIVNET_TOKEN}
