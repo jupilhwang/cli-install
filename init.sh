@@ -1,8 +1,7 @@
 #!/bin/bash
 
 sudo apt -y update && sudo apt -y upgrade && \
-sudo apt -y install unzip jq build-essential ruby-dev python3 python3-pip && \
-gem install --no-ri --no-rdoc cf-uaac
+sudo apt -y install unzip jq build-essential python3 python3-pip python3-venv
 
 ## terraform 
 VERSION=0.11.14
