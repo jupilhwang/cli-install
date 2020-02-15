@@ -42,6 +42,11 @@ wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/r
 NAME=uaac
 wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O /tmp/${NAME} | chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
 
+
+## bosh backup and restore
+NAME=bbr
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/bosh-backup-and-restore/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O /tmp/${NAME} | chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+
 # pks and ikubectl
 #pivnet login --api-toke=${PIVNET_TOKEN}
 PKS_VERSION=$(pivnet releases -p pivotal-container-service --format json | jq -r '.[].version' | head -n 1)
