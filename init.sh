@@ -1,5 +1,12 @@
 #!/bin/bash
 
+set -eo pipefail
+
+TMP_DIR=/tmp/pivotal
+if [[ ! -z ${TMP_DIR} ]]; then
+	mkdir -p ${TMP_DIR}
+fi
+
 sudo apt -y update && sudo apt -y upgrade && \
 sudo apt -y install unzip jq build-essential python3 python3-pip python3-venv
 
@@ -18,7 +25,8 @@ sudo mv ${NAME} /usr/local/bin
 
 ## om
 NAME=om
-wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("tar.gz")) | .browser_download_url') -O- | tar xzf - -C /tmp  && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("tar.gz")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR}  && chmod a+x ${TMP_DIR}/${NAME} && \
+sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## bosh
 NAME=bosh
@@ -28,24 +36,28 @@ sudo mv ${NAME} /usr/local/bin
 
 ## cf
 NAME=cf
-wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest | jq -r '.name' | sed 's/v//g')&source=github-rel" -O- | tar xzvf - -C /tmp && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest | jq -r '.name' | sed 's/v//g')&source=github-rel" -O- | tar xzvf - -C ${TMP_DIR} && chmod a+x ${TMP_DIR}/${NAME} && \
+sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## fly
 NAME=fly
-wget $(curl -s https://api.github.com/repos/concourse/concourse/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select(.name | contains("fly")) | select(.name | contains("sha") | not) | .browser_download_url') -O- | tar xzvf - -C /tmp && chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
-
-## credhub
-NAME=credhub
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | sudo tar xzvfp - -C /tmp && sudo chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/concourse/concourse/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select(.name | contains("fly")) | select(.name | contains("sha") | not) | .browser_download_url') -O- | tar xzvf - -C ${TMP_DIR} && chmod a+x ${TMP_DIR}/${NAME} && \
+sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## uaa-cli
 NAME=uaac
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O /tmp/${NAME} | chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
-
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} | chmod a+x ${TMP_DIR}/${NAME} && \
+sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## bosh backup and restore
 NAME=bbr
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/bosh-backup-and-restore/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O /tmp/${NAME} | chmod a+x /tmp/${NAME} && sudo mv /tmp/${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/bosh-backup-and-restore/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} | chmod a+x ${TMP_DIR}/${NAME} && \
+sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+
+## credhub
+NAME=credhub
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | sudo tar xzvfp - -C ${TMP_DIR} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo cp ${TMP_DIR}/${NAME} /usr/local/bin
+
 
 # pks and ikubectl
 #pivnet login --api-toke=${PIVNET_TOKEN}
