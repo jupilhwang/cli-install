@@ -8,7 +8,7 @@ if [[ ! -z ${TMP_DIR} ]]; then
 fi
 
 sudo apt -y update && sudo apt -y upgrade && sudo apt -y install \
-apt-transport-https ca-certifications curl gnupg-agent software-properties-common unzip jq build-essential python3 python3-pip python3-venv docker.io
+apt-transport-https ca-certificates curl gnupg-agent software-properties-common unzip jq build-essential python3 python3-pip python3-venv docker.io
 
 ## Disable swap
 sudo swapoff --all
