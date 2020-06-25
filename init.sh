@@ -7,37 +7,14 @@ if [[ ! -z ${TMP_DIR} ]]; then
 	mkdir -p ${TMP_DIR}
 fi
 
-sudo apt -y update && sudo apt -y upgrade && \
-sudo apt -y install unzip jq build-essential python3 python3-pip python3-venv
+sudo apt -y update && sudo apt -y upgrade && sudo apt -y install \
+apt-transport-https ca-certifications curl gnupg-agent software-properties-common unzip jq build-essential python3 python3-pip python3-venv docker.io
 
-## terraform 
-VERSION=0.11.14
-wget -O terraform.zip https://releases.hashicorp.com/terraform/${VERSION}/terraform_${VERSION}_linux_amd64.zip && \
-unzip terraform.zip && \
-sudo mv terraform /usr/local/bin && \
-rm -rf terraform.zip
-
-## pivnet
-NAME=pivnet
-wget $(curl -s https://api.github.com/repos/pivotal-cf/pivnet-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && \
-chmod a+x ${NAME} && \
-sudo mv ${NAME} /usr/local/bin
-
-## om
-NAME=om
-wget $(curl -s https://api.github.com/repos/pivotal-cf/om/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("tar.gz")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR}  && chmod a+x ${TMP_DIR}/${NAME} && \
-sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
-
-## bosh
-NAME=bosh
-wget $(curl -s https://api.github.com/repos/cloudfoundry/bosh-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${NAME} && \
-chmod a+x ${NAME} && \
-sudo mv ${NAME} /usr/local/bin
-
-## cf
-NAME=cf
-wget "https://packages.cloudfoundry.org/stable?release=linux64-binary&version=$(curl -s https://api.github.com/repos/cloudfoundry/cli/releases/latest | jq -r '.name' | sed 's/v//g')&source=github-rel" -O- | tar xzvf - -C ${TMP_DIR} && chmod a+x ${TMP_DIR}/${NAME} && \
-sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+## Disable swap
+sudo swapoff --all
+sudo sed -ri '/\sswap\s/s/^#?/#/' /etc/fstab
+sudo ufw Disable	# Do not this in producton
+echo "Hosekeeping done"
 
 ## fly
 NAME=fly
@@ -46,53 +23,35 @@ sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## uaa-cli
 NAME=uaac
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} | chmod a+x ${TMP_DIR}/${NAME} && \
-sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} | chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
-## bosh backup and restore
-NAME=bbr
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/bosh-backup-and-restore/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} | chmod a+x ${TMP_DIR}/${NAME} && \
-sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+## kubectl
+NAME=kubectl
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod a+x kubectl && sudo mv kubectl /usr/local/bin
 
-## credhub
-NAME=credhub
-wget $(curl -s https://api.github.com/repos/cloudfoundry-incubator/credhub-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | sudo tar xzvfp - -C ${TMP_DIR} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo cp ${TMP_DIR}/${NAME} /usr/local/bin
+## Velero
+wget $(curl -s https://api.github.com/repos/vmware-tanzu/velero/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select( .name | contains("amd64")) | .browser_download_url') -O- | tar xzf - -C ${HOME}
 
+## helm
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 | sh -
 
-# pks and ikubectl
-#pivnet login --api-toke=${PIVNET_TOKEN}
-PKS_VERSION=$(pivnet releases -p pivotal-container-service --format json | jq -r '.[].version' | head -n 1)
-PKS_CLI_FILE_ID=$(pivnet product-files -p pivotal-container-service -r ${PKS_VERSION} --format json | jq -r '.[] | select(.name | contains("PKS CLI") and contains("Linux")).id')
-KUBECTL_CLI_FILE_ID=$(pivnet product-files -p pivotal-container-service -r ${PKS_VERSION} --format json | jq -r '.[] | select(.name | contains("Kubectl") and contains("Linux")).id')
-pivnet download-product-files -p pivotal-container-service -r ${PKS_VERSION} -i ${PKS_CLI_FILE_ID}
-pivnet download-product-files -p pivotal-container-service -r ${PKS_VERSION} -i ${KUBECTL_CLI_FILE_ID}
-chmod a+x pks* kubectl*
-sudo mv pks* /usr/local/bin/pks
-sudo mv kubectl* /usr/local/bin/kubectl
+## Istio & istio ctl
+NAME=istio
+wget $(curl -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select( .name | contains("sha256") | not) | select( .name | contains("istioctl") | not ) | .browser_download_url') -O- | tar xzf - -C ${HOME} && sudo cp ${HOME}/istio*/bin/istioctl /usr/local/bin
+
+## octant
+NAME=octant
+wget $(curl -s https://api.github.com/repos/vmware-tanzu/octant/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select( .name | contains("tar.gz")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+
+## tkg
 
 
-######
-# install vSphere CLI (govc)
 ######
 NAME=govc
 wget $(curl -s https://api.github.com/repos/vmware/govmomi/releases/latest | jq -r '.assets[] | select(.name | contains("linux") and contains("amd64")) | .browser_download_url') && gzip -d ${NAME}*gz && chmod a+x ${NAME}_linux_amd64 && sudo mv ${NAME}_linux_amd64 /usr/local/bin/govc
 
-
 ##
 ## cli versions
-##
-terraform -version
-echo "Pivnet cli version : $(pivnet -version)"
-echo "Ops Manager cli version : $(om -version)"
-echo "BOSH cli version : $(bosh -version)"
-echo "Concourse cli version : $(fly -version)"
 echo "vSphere Cli version : $(govc version)"
-pks --version
 echo "Kubectl version : $(kubectl version --short)"
 echo "jq version : $(jq --version)"
-echo "credhub version : $(credhub --version)"
-
-
-
-## cf7 - https://packages.cloudfoundry.org/stable?release=linux64-binary&version=7.0.0-beta.28&source=github-rel
-## jq - https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64
