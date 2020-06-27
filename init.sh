@@ -34,7 +34,7 @@ sudo tee /etc/docker/daemon.json >/dev/null <<EOF
 	"exec-opts": ["native.cgroupdriver=systemd"],
 	"insecure-registries": ["0.0.0.0/0"],
 	"log-driver": "json-file",
-	"log-opts": {}
+	"log-opts": {
 		"max-size": "100m"
 	},
 	"storage-driver": "overlay2"
