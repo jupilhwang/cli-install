@@ -51,15 +51,12 @@ echo "### Downloading uaac"
 NAME=uaac
 wget -q $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
-## ytt
-echo "### Downloading ytt"
-NAME=ytt
-wget -q $(curl -s https://api.github.com/repos/k14s/ytt/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
-
-## kapp
-echo "### Downloading kapp"
-NAME=kapp
-wget -q $(curl -s https://api.github.com/repos/k14s/kapp/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+## k14s 
+k14sapps=("ytt" "vendir" "kapp" "kbld")
+for NAME in ${k14sapps[@]}; do
+	echo "### Downloading k14s - ${NAME}"
+	wget -q $(curl -s https://api.github.com/repos/k14s/${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+done
 
 ## kubectl
 echo "### Downloading kubectl"
@@ -106,7 +103,7 @@ export GOVC_DATASTORE=LUN01
 export GOVC_NETWORK="VM Network"
 EOF
 
-echo "source .govc-env" >> ~/.bashrc
+echo "source ~/.govc-env" >> ~/.bashrc
 
 ##
 ## cli versions
