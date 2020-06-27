@@ -51,6 +51,16 @@ echo "### Downloading uaac"
 NAME=uaac
 wget -q $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
+## ytt
+echo "### Downloading ytt"
+NAME=ytt
+wget -q $(curl -s https://api.github.com/repos/k14s/ytt/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+
+## kapp
+echo "### Downloading kapp"
+NAME=kapp
+wget -q $(curl -s https://api.github.com/repos/k14s/ytt/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+
 ## kubectl
 echo "### Downloading kubectl"
 NAME=kubectl
