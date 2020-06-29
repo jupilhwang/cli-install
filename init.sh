@@ -99,6 +99,7 @@ export GOVC_INSECURE=1
 export GOVC_URL=https://vcsa-01.haas-242.pez.pivotal.io/sdk
 export GOVC_USERNAME=administrator@vsphere.local
 export GOVC_PASSWORD=VMware1!
+export GOVC_DATACENTER='datacenter'
 export GOVC_DATASTORE=LUN01
 export GOVC_NETWORK="VM Network"
 EOF
