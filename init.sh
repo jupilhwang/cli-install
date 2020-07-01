@@ -58,6 +58,11 @@ for NAME in ${k14sapps[@]}; do
 	wget -q $(curl -s https://api.github.com/repos/k14s/${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 done
 
+## Kustomize
+echo "### Downloading Kustomize"
+NAME=kustomize
+wget -q $(curl -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR}/${NAME} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+
 ## kubectl
 echo "### Downloading kubectl"
 NAME=kubectl
