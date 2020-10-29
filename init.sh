@@ -52,7 +52,7 @@ NAME=uaac
 wget -q $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## k14s 
-k14sapps=("ytt" "vendir" "kapp" "kbld")
+k14sapps=("ytt" "vendir" "kapp" "kbld" "imgpkg")
 for NAME in ${k14sapps[@]}; do
 	echo "### Downloading k14s - ${NAME}"
 	wget -q $(curl -s https://api.github.com/repos/k14s/${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
@@ -61,7 +61,7 @@ done
 ## Kustomize
 echo "### Downloading Kustomize"
 NAME=kustomize
-wget -q $(curl -s https://api.github.com/repos/istio/istio/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR}/${NAME} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+wget -q $(curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases | jq -r '[.[] | select(.name | contains("kustomize"))][0] | .assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## kubectl
 echo "### Downloading kubectl"
