@@ -16,7 +16,7 @@ ${USER} ALL=(ALL) NOPASSWD:ALL
 EOF
 
 ## Add user to docker group
-sudo usermod -G docker ${USER}
+sudo usermod -a -G docker ${USER}
 
 ## Docker service enable
 sudo systemctl enable docker
@@ -55,7 +55,7 @@ wget -q $(curl -s https://api.github.com/repos/cloudfoundry-incubator/uaa-cli/re
 k14sapps=("ytt" "vendir" "kapp" "kbld" "imgpkg")
 for NAME in ${k14sapps[@]}; do
 	echo "### Downloading k14s - ${NAME}"
-	wget -q $(curl -s https://api.github.com/repos/k14s/${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+	wget -q $(curl -s https://api.github.com/repos/vmware-tanzu/carvel-${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 done
 
 ## Kustomize
@@ -77,8 +77,8 @@ echo "### Downloading Velero"
 wget -q $(curl -s https://api.github.com/repos/vmware-tanzu/velero/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | select( .name | contains("amd64")) | .browser_download_url') -O- | tar xzf - -C ${HOME}/
 
 ## helm
-#echo "### Downloading Helm 3"
-#curl -s https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 | sh -
+echo "### Downloading Helm 3"
+curl -s https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get-helm-3 | bash -
 
 ## Istio & istio ctl
 echo "### Downloading Istio"
@@ -110,6 +110,12 @@ export GOVC_NETWORK="VM Network"
 EOF
 
 echo "source ~/.govc-env" >> ~/.bashrc
+tee ~/.bash >/dev/null <<EOF
+alias k=kubectl
+source <(kubectl completion bash)
+source <(kubectl completion bash | sed 's/kubectl/k/g')
+EOF
+
 
 ##
 ## cli versions
