@@ -61,7 +61,7 @@ done
 ## Kind
 echo "### Downloading Kind"
 NAME=kind
-wget -q $(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases | jq -r '[.[] | select(.name | contains("kind"))][0] | .assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+curl -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## Kustomize
 echo "### Downloading Kustomize"
@@ -73,9 +73,9 @@ echo "### Downloading kubectl"
 NAME=kubectl
 curl -sLO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl && chmod a+x kubectl && sudo mv kubectl /usr/local/bin
 
-echo "alias k=kubectl" >> .bashrc
-echo "source <(kubectl completion bash)" >> .bashrc
-echo "source <(kubectl completion bash | sed 's/kubectl/k/g')" >> .bashrc
+echo "alias k=kubectl" >> ~/.bashrc
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+echo "source <(kubectl completion bash | sed 's/kubectl/k/g')" >> ~/.bashrc
 
 ## Velero
 echo "### Downloading Velero"
