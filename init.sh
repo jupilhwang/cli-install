@@ -58,6 +58,11 @@ for NAME in ${k14sapps[@]}; do
 	wget -q $(curl -s https://api.github.com/repos/vmware-tanzu/carvel-${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux")) | .browser_download_url') -O ${TMP_DIR}/${NAME} && chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 done
 
+## Kind
+echo "### Downloading Kind"
+NAME=kind
+wget -q $(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases | jq -r '[.[] | select(.name | contains("kind"))][0] | .assets[] | select(.name | contains("linux")) | .browser_download_url') -O- | tar xzf - -C ${TMP_DIR} && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+
 ## Kustomize
 echo "### Downloading Kustomize"
 NAME=kustomize
