@@ -61,12 +61,12 @@ done
 ## Kind
 echo "### Downloading Kind"
 NAME=kind
-curl -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/kubernetes-sigs/${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+curl -s -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/kubernetes-sigs/kind/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## yq
 echo "### Downloading yq"
 NAME=yq
-curl -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/mikefarah/${NAME}/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+curl -s -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## Kustomize
 echo "### Downloading Kustomize"
