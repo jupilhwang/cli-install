@@ -66,7 +66,7 @@ curl -s -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/kubernetes
 ## yq
 echo "### Downloading yq"
 NAME=yq
-curl -s -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r '.assets[] | select(.name | contains("linux-amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
+curl -s -Lo ${TMP_DIR}/${NAME} $(curl -s https://api.github.com/repos/mikefarah/yq/releases/latest | jq -r '.assets[] | select(.name | contains("linux_amd")) | .browser_download_url') && sudo chmod a+x ${TMP_DIR}/${NAME} && sudo mv ${TMP_DIR}/${NAME} /usr/local/bin
 
 ## Kustomize
 echo "### Downloading Kustomize"
