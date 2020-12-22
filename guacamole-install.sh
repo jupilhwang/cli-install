@@ -3,11 +3,12 @@
 GUACAMOLE_VERSION=1.2.0
 GUACAMOLE_FQDN=jumpbox.kr.pivotal.io
 ADMIN_PASSWORD=$(echo -n P@ssw0rd | openssl md5 | sed 's/(stdin)= //g')
+LETSENCRYPT_EMAIL=jupil.hwang@gmail.com
 
 #set -eo pipefail
 
 sudo apt -y update && sudo apt -y upgrade && \
-	sudo apt -y install tomcat9 tomcat9-admin tomcat9-user nginx certbot python3-certbot-nginx make gcc g++ libcairo2-dev libjpeg-turbo8-dev libpng-dev libtool-bin libossp-uuid-dev libavcodec-dev libavutil-dev libswscale-dev freerdp2-dev libpango1.0-dev libssh2-1-dev libvncserver-dev libtelnet-dev libssl-dev libvorbis-dev libwebp-dev
+	sudo apt -y install tomcat9 tomcat9-admin tomcat9-user nginx certbot python3-certbot-nginx build-essential libcairo2-dev libjpeg-turbo8-dev libpng-dev libtool-bin libossp-uuid-dev libvncserver-dev freerdp2-dev libssh2-1-dev libtelnet-dev libwebsockets-dev libpulse-dev libvorbis-dev libwebp-dev libssl-dev libpango1.0-dev libswscale-dev libavcodec-dev libavutil-dev libavformat-dev
 
 sudo systemctl enable tomcat9
 sudo systemctl enable nginx
@@ -30,7 +31,8 @@ fi
 
 # refresh libs
 sudo ldconfig
-#sudo systemctl enable guacd
+sudo systemctl daemon-reload
+sudo systemctl enable guacd
 
 # guacamole client
 [ ! -d ~/etc/guacamole ] && sudo mkdir -p /etc/guacamole
@@ -93,14 +95,11 @@ EOF
 
 #sudo ln -sf /etc/guacamole/nginx-site-guacamole /etc/nginx/sites-enabled/
 
-sudo certbot --nginx -d ${GUACAMOLE_FQDN} --agree-tos
+sudo certbot --nginx -d ${GUACAMOLE_FQDN} --agree-tos --hsts --redirect --staple-ocsp --email ${LETSENCRYPT_EMAIL}
 
 # enable crontab for renew certbot
 #sudo crontab -e
 
 
-
-sudo systemctl restart guacd
-sudo systemctl restart tomcat9
-sudo systemctl restart nginx
+sudo systemctl restart guacd tomcat9 nginx
 
