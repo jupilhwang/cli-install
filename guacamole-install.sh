@@ -17,7 +17,7 @@ cd ~/works
 
 echo '#### Download guacamole daemon and client war'
 [ ! -d ~/works/guacamole-server-${GUACAMOLE_VERSION} ] && \
-wget https://downloads.apache.org/guacamole/${GUACAMOLE_VERSION}/source/guacamole-server-${GUACAMOLE_VERSION}.tar.gz -O - | tar xzvf -
+wget https://downloads.apache.org/guacamole/${GUACAMOLE_VERSION}/source/guacamole-server-${GUACAMOLE_VERSION}.tar.gz -O - | tar xzf -
 [ ! -f ~/works/guacamole-${GUACAMOLE_VERSION}.war ] && \
 wget https://downloads.apache.org/guacamole/${GUACAMOLE_VERSION}/binary/guacamole-${GUACAMOLE_VERSION}.war
 
