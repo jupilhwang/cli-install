@@ -1,4 +1,6 @@
-### Pivotal CLIs for PAS & PKS
+### VMware Tanzu CLIs on Ubuntu Server
+
+- docker
 
 - fly
 - uaac
@@ -7,6 +9,5 @@
 - helm
 - govc
 - istio 
-
-
-
+- k14s
+- kustomize
