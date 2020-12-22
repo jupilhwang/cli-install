@@ -97,3 +97,10 @@ sudo certbot --nginx -d ${GUACAMOLE_FQDN} --agree-tos
 
 # enable crontab for renew certbot
 #sudo crontab -e
+
+
+
+sudo systemctl restart guacd
+sudo systemctl restart tomcat9
+sudo systemctl restart nginx
+
