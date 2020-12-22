@@ -35,9 +35,20 @@ sudo systemctl daemon-reload
 sudo systemctl enable guacd
 
 # guacamole client
+echo ""
+echo "## tomcat9 - guacamole web client"
 [ ! -d ~/etc/guacamole ] && sudo mkdir -p /etc/guacamole
 sudo cp ~/works/guacamole-${GUACAMOLE_VERSION}.war /etc/guacamole/guacamole.war
 sudo ln -sf /etc/guacamole/guacamole.war /var/lib/tomcat9/webapps/
+
+# firewall
+if [ -x firewall-cmd ]; then
+	echo ""
+	echo "## set firewall rule"
+	sudo firewall-cmd --permanent --add-port=80/tcp
+	sudo firewall-cmd --permanent --add-port=443/tcp
+	sudo firewall-cmd --reload
+fi
 
 sudo mkdir -p /etc/guacamole/{extensions,lib}
 sudo tee /etc/guacamole/guacamole.properties &>/dev/null <<EOF
