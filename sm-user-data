@@ -1,0 +1,6 @@
+users:
+  - default
+ssh_pwauth: True
+chpasswd: { expire: False}
+runcmd:
+  - curl -sSL https://raw.githubusercontent.com/jupilhwang/cli-install/master/init.sh | bash - 
