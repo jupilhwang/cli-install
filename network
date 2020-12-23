@@ -1,0 +1,11 @@
+network:
+  version: 2
+  ethernets:
+    id0:
+      match: { name: ens* }
+      dhcp4: false
+      dhcp6: false
+      addresses: [10.213.89.254/24]
+      gateway4: 10.213.89.1
+      nameservers:
+        addresses: [10.192.2.10,10.192.2.11,8.8.8.8]
