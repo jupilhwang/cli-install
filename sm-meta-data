@@ -1,3 +1,5 @@
+instance_id: lnx-01
+host_name: lnx-jumpbox
 network:
   version: 2
   ethernets:
